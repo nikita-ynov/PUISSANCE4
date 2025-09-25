@@ -1,17 +1,21 @@
+{{define "index.html"}}
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <title>{{ .Title }}</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 
 <body>
     {{template "header" .}}
+
     <h1>{{ .Title }}</h1>
     <p>{{ .Message }}</p>
+    
     {{template "footer" .}}
 </body>
 
 </html>
+{{end}}
