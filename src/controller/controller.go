@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"power4/controller/structure"
 	"power4/pages"
 	"sync"
 )
@@ -76,11 +77,18 @@ func Step(w http.ResponseWriter, r *http.Request) {
 		color = "jaune"
 	}
 
-	data := map[string]string{
+	// data := map[string]string{
+	// 	"Title":   "Jeu",
+	// "Message": "C'est au joueur " + color + " de jouer. Tu as choisi la pièce " + choice,
+	// }
+	data := map[string]any{
 		"Title":   "Jeu",
 		"Message": "C'est au joueur " + color + " de jouer. Tu as choisi la pièce " + choice,
+		"Placements": []structure.Placement{
+			{X: 0, Y: 0, Color: "red"},
+			{X: 0, Y: 70, Color: "yellow"},
+		},
 	}
-
 	// alterner le joueur pour le prochain tour
 	if currentPlayer == 1 {
 		currentPlayer = 2

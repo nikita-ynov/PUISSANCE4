@@ -26,8 +26,14 @@
             </form>
             <div class="table__container">
                 <img class="table" src="/static/images/tableau.png" alt="">
-                <!-- <img class="jetton" src="/static/images/jeton_red.png" alt=""> -->
-            </div>
+            {{range .Placements}}
+                <img 
+                    style="left: {{.X}}px; bottom: {{.Y}}px;" 
+                    class="jetton {{.Color}}" 
+                    src="/static/images/jeton_{{.Color}}.png" 
+                    alt="">
+            {{end}}            
+        </div>
         </div>
     </main>
     {{template "footer" .}}
