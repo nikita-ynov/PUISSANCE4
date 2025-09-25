@@ -11,9 +11,25 @@
 <body>
     {{template "header" .}}
 
-    <h1>{{ .Title }}</h1>
-    <p>{{ .Message }}</p>
-    
+    <main>
+        <h1>{{ .Title }}</h1>
+        <p>{{ .Message }}</p>
+        <div class="game__container">
+            <form method="post" action="/step" class="buttons__container">
+                <button>piece</button>
+                <button>piece</button>
+                <button>piece</button>
+                <button>piece</button>
+                <button>piece</button>
+                <button>piece</button>
+                <button>piece</button>
+            </form>
+            <div class="table__container">
+                <img class="table" src="/static/images/tableau.png" alt="">
+                <img class="jetton" src="/static/images/jeton_red.png" alt="">
+            </div>
+        </div>
+    </main>
     {{template "footer" .}}
 </body>
 

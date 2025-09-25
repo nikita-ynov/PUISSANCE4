@@ -7,3 +7,37 @@
 body {
     background: #ffffff;
 }
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.table {
+    width: 500px;
+    height: 450px;
+}
+
+.buttons__container {
+    width: 500px;
+    display: flex;
+}
+
+.buttons__container button {
+    width: calc(500px / 7);
+}
+
+.table__container {
+    position: relative;
+}
+
+.table__container .jetton {
+    position: absolute;
+    /* Tout en bas, si je veux ajouter 1 en haut c'est +70px */
+    bottom: 0px; 
+    left: 10px;
+    width: 65px;
+    margin-bottom: 20px;
+}
