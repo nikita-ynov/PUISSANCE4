@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 	"power4/controller/structure"
+	"power4/controller/utils"
 	"power4/pages"
 	"sync"
 )
@@ -72,22 +73,16 @@ func Step(w http.ResponseWriter, r *http.Request) {
 	mu.Lock()
 	var color string
 	if currentPlayer == 1 {
-		color = "rouge"
+		color = "red"
 	} else {
-		color = "jaune"
+		color = "yellow"
 	}
 
-	// data := map[string]string{
-	// 	"Title":   "Jeu",
-	// "Message": "C'est au joueur " + color + " de jouer. Tu as choisi la pièce " + choice,
-	// }
+	table := utils.PlacePiece(choice, color, &structure.Table{})
 	data := map[string]any{
-		"Title":   "Jeu",
-		"Message": "C'est au joueur " + color + " de jouer. Tu as choisi la pièce " + choice,
-		"Placements": []structure.Placement{
-			{X: 0, Y: 0, Color: "red"},
-			{X: 0, Y: 70, Color: "yellow"},
-		},
+		"Title":      "Jeu",
+		"Message":    "C'est au joueur " + color + " de jouer. Tu as choisi la pièce " + choice,
+		"Placements": table,
 	}
 	// alterner le joueur pour le prochain tour
 	if currentPlayer == 1 {
