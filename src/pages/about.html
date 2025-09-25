@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    {{template "header" .}}
     <h1>{{ .Title }}</h1>
     <p>{{ .Message }}</p>
+    {{template "footer" .}}
 </body>
 </html>

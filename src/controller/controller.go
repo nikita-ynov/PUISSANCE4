@@ -1,13 +1,15 @@
 package controller
 
 import (
-	"html/template"
 	"net/http"
+	"power4/pages"
 )
 
-func renderPage(w http.ResponseWriter, filename string, data map[string]string) {
-	page := template.Must(template.ParseFiles("pages/" + filename))
-	page.Execute(w, data)
+func renderPage(w http.ResponseWriter, filename string, data any) {
+	err := pages.Temp.ExecuteTemplate(w, filename, data)
+	if err != nil {
+		http.Error(w, "Erreur rendu template : "+err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
