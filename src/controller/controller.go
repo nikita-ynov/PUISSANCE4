@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-func renderTemplate(w http.ResponseWriter, filename string, data map[string]string) {
-	tmpl := template.Must(template.ParseFiles("template/" + filename))
+func renderPage(w http.ResponseWriter, filename string, data map[string]string) {
+	tmpl := template.Must(template.ParseFiles("pages/" + filename))
 	tmpl.Execute(w, data)
 }
 
@@ -15,7 +15,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		"Title":   "Accueil",
 		"Message": "Bienvenue sur la page d'accueil !",
 	}
-	renderTemplate(w, "index.html", data)
+	renderPage(w, "index.html", data)
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +23,7 @@ func About(w http.ResponseWriter, r *http.Request) {
 		"Title":   "A propos",
 		"Message": "Ceci est la page a propos",
 	}
-	renderTemplate(w, "about.html", data)
+	renderPage(w, "about.html", data)
 }
 
 func Contact(w http.ResponseWriter, r *http.Request) {
@@ -36,13 +36,13 @@ func Contact(w http.ResponseWriter, r *http.Request) {
 			"Message": "Merci " + name + " pour ton message " + msg,
 		}
 
-		renderTemplate(w, "contact.html", data)
+		renderPage(w, "contact.html", data)
 		return
 	}
 	data := map[string]string{
 		"Title":   "Contact",
 		"Message": "Rentrer votre message",
 	}
-	renderTemplate(w, "contact.html", data)
+	renderPage(w, "contact.html", data)
 
 }
