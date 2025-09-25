@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 	"power4/pages"
+	"sync"
 )
 
 func renderPage(w http.ResponseWriter, filename string, data any) {
@@ -47,4 +48,46 @@ func Contact(w http.ResponseWriter, r *http.Request) {
 	}
 	renderPage(w, "contact.html", data)
 
+}
+
+var (
+	mu            sync.Mutex
+	currentPlayer = 1 // 1 = rouge, 2 = jaune
+)
+
+func Step(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		data := map[string]string{
+			"Title":   "Jeu",
+			"Message": "Choisis une pièce pour commencer",
+		}
+		renderPage(w, "index.html", data)
+		return
+	}
+
+	choice := r.FormValue("piece") // assure-toi que tes boutons ont name="piece" et value="..."
+
+	// section critique : lire/modifier currentPlayer
+	mu.Lock()
+	var color string
+	if currentPlayer == 1 {
+		color = "rouge"
+	} else {
+		color = "jaune"
+	}
+
+	data := map[string]string{
+		"Title":   "Jeu",
+		"Message": "C'est au joueur " + color + " de jouer. Tu as choisi la pièce " + choice,
+	}
+
+	// alterner le joueur pour le prochain tour
+	if currentPlayer == 1 {
+		currentPlayer = 2
+	} else {
+		currentPlayer = 1
+	}
+	mu.Unlock()
+
+	renderPage(w, "index.html", data)
 }

@@ -11,6 +11,7 @@ func New() *http.ServeMux {
 	mux.HandleFunc("/", controller.Home)
 	mux.HandleFunc("/about", controller.About)
 	mux.HandleFunc("/contact", controller.Contact)
+	mux.HandleFunc("/step", controller.Step)
 
 	return mux
 }
