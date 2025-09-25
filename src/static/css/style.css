@@ -37,6 +37,7 @@ main {
     position: absolute;
     /* Tout en bas, si je veux ajouter 1 en haut c'est +70px */
     bottom: 0px; 
+    /* Pour aller a droit c'est aussi +70px par example x=1 c'est 80px, x=0 est 10px */
     left: 10px;
     width: 65px;
     margin-bottom: 20px;
