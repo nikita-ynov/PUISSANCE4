@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -6,6 +8,49 @@
 
 body {
     background: #ffffff;
+    background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+    font-family: "Montserrat", sans-serif;
+}
+
+html, body {
+    height: 100%;              /* occupe toute la hauteur de la fenêtre */
+    margin: 0;                 /* enlève les marges par défaut */
+    display: flex;
+    flex-direction: column;    /* empile header, main, footer */
+}
+
+main {
+    flex: 1;                   /* prend toute la place dispo */
+}
+
+footer {
+    background: #333;          /* exemple */
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.logo {
+    font-weight: 600;
+    font-size: 1.6rem;
+}
+
+header ul {
+    display: flex;
+    gap: 1rem;
+}
+
+ul,
+li,
+a {
+    list-style: none;
+    text-decoration: none;
 }
 
 main {
@@ -36,7 +81,7 @@ main {
 .table__container .jetton {
     position: absolute;
     /* Tout en bas, si je veux ajouter 1 en haut c'est +70px */
-    bottom: 0px; 
+    bottom: 0px;
     /* Pour aller a droit c'est aussi +70px par example x=1 c'est 80px, x=0 est 10px */
     left: 10px;
     width: 65px;
