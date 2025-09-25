@@ -19,4 +19,5 @@ func PlacePiece(piece int, color string, table *structure.Table) {
 		x = 70 * 5
 	}
 	table.Placement = append(table.Placement, structure.Placement{X: x, Y: y, Color: color})
+	return table.Placement
 }
