@@ -2,7 +2,7 @@ package utils
 
 import "power4/controller/structure"
 
-func placePiece(piece int, color string, table *structure.Table) {
+func PlacePiece(piece int, color string, table *structure.Table) {
 	var x, y int = 0, 0
 	switch piece {
 	case 1:
