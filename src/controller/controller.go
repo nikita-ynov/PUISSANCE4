@@ -6,8 +6,8 @@ import (
 )
 
 func renderPage(w http.ResponseWriter, filename string, data map[string]string) {
-	tmpl := template.Must(template.ParseFiles("pages/" + filename))
-	tmpl.Execute(w, data)
+	page := template.Must(template.ParseFiles("pages/" + filename))
+	page.Execute(w, data)
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
