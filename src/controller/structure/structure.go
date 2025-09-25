@@ -5,7 +5,7 @@ type Table struct {
 }
 
 type Placement struct {
-	x     int
-	y     int
-	color string
+	X     int
+	Y     int
+	Color string
 }
