@@ -108,7 +108,19 @@ func Step(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// 2) Vérifier s'il y a un gagnant
+		winner := utils.CheckPlacement(gameTable)
 
+		if winner != "" {
+			// On annonce le gagnant et on propose de rejouer via un refresh/accueil.
+			data := map[string]any{
+				"Title":      "Jeu",
+				"Message":    "Le joueur " + winner + " a gagné !",
+				"Placements": gameTable.Placement,
+				"Winner":     winner,
+			}
+			renderPage(w, "index.html", data)
+			return
+		}
 		// 3) Construire le message et gérer le tour suivant / reset
 
 		// Alterner le joueur (partie continue)
