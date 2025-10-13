@@ -1,0 +1,30 @@
+.btnenv {
+    padding: 8px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.16);
+    border-radius: 20px;
+    transition: 0.3s;
+    border: none;
+}
+
+.btnenv:hover,
+.btnenv:focus {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+}
+
+.contact{
+    margin: 10px;
+}
+
+.txt{
+    padding: 10px;
+}
+
+.txtentre{
+    background-color: rgba(148, 148, 148, 0.103);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+    border-radius: 5px;
+    border: 2px solid rgba(0, 0, 0, 0.386);
+    padding: 4px;
+}
