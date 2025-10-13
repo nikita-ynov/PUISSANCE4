@@ -7,54 +7,55 @@
     <link rel="stylesheet" href="static/css/about.css">
 </head>
 <body>
-    {{template "header" .}}
-        <div class="butetregle">
-            <h1 class="titre">A propos</h1>
-            <h3>Bienvenu dans notre jeu de puissance 4 !!</h3>
-            <div>
-            <p class="question">tout d'abord, quels sont les règles et le but de ce jeu ?</p>
-                <div class="regles">
-                    <h5 class="minititre">Le but : </h5>
-                    <p>
+    <main>
+        {{template "header" .}}
+            <div class="butetregle">
+                <h1 class="titre">A propos</h1>
+                <h3>Bienvenu dans notre jeu de puissance 4 !!</h3>
+                <div>
+                <p class="question">tout d'abord, quels sont les règles et le but de ce jeu ?</p>
+                    <div class="regles">
+                        <h5 class="minititre">Le but : </h5>
+                        <p>
                         Être le premier joueur à aligner quatre de ses jetons de la même couleur, horizontalement, verticalement ou en diagonale.
-                    </p>
-                    <h5 class="minititre">Mise en place</h5>
-                    <p>
+                        </p>
+                        <h5 class="minititre">Mise en place</h5>
+                        <p>
                         Chaque joueur choisit une couleur de jetons : rouge ou jaune. <br>
                         Le joueur qui commence est désigné au hasard, ou d’un commun accord
-                    </p>
-                    <h5 class="minititre">Déroulement d’une partie</h5>
-                    <p>
+                        </p>
+                        <h5 class="minititre">Déroulement d’une partie</h5>
+                        <p>
                         À tour de rôle, les joueurs insèrent un jeton dans la colonne de leur choix. <br>
                         Le jeton tombe jusqu’à la case la plus basse disponible de cette colonne.   <br>
                         Le joueur suivant fait de même, et ainsi de suite. <br>
                         À chaque coup, il faut observer le plateau : une opportunité ou un piège peut se cacher ! 
-                    </p>
-                    <h5 class="minititre">Gagner la partie</h5>
-                    <p>
+                        </p>
+                        <h5 class="minititre">Gagner la partie</h5>
+                        <p>
                         Un joueur gagne dès qu’il aligne quatre jetons consécutifs de sa couleur : <br>
                         horizontalement, <br>
                         verticalement, <br>
                         ou en diagonale. <br>
                         Si le plateau est rempli sans qu’aucun joueur n’ait aligné quatre jetons, la partie est nulle. 
-                    </p>
-                    <h5 class="minititre">Petits conseils</h5>
-                    <p>
+                        </p>
+                        <h5 class="minititre">Petits conseils</h5>
+                        <p>
                         Pense à bloquer ton adversaire avant qu’il ne forme son alignement. <br>
                         Anticipe plusieurs coups à l’avance pour créer des pièges. <br>
                         Et surtout, amuse-toi : chaque partie est une nouvelle stratégie à inventer ! 
-                    </p>
-                </div>
-                <p class="question">Comment ce jeu a été fait ?</p>
-                <div class="handmade">
-                    <p>
+                        </p>
+                    </div>
+                    <p class="question">Comment ce jeu a été fait ?</p>
+                    <div class="handmade">
+                        <p>
                         Ce jeu de Puissance 4 a été réalisé manuellement à deux, avec nos propres moyens. <br>
                         Nous avons découpé, assemblé et peint chaque élément nous-mêmes, pour donner vie à une version unique et artisanale du célèbre jeu. br
                         Un projet simple, mais fait avec créativité, patience et esprit d’équipe.
-                    </p>
+                        </p>
+                    </div>
                 </div>
-            </div>
-    </div>
-    <div class="footer">{{template "footer" .}}</div>
+        </div>
+    </main>
 </body>
 </html>
