@@ -1,0 +1,41 @@
+.butetregle {
+    position: relative;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center; 
+    text-align: center;
+    border-radius: 20px;
+    background-color: rgba(218, 238, 255, 0.19);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    width: 70vh;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.regles {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.072);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);   
+}
+
+.minititre{
+    margin: 8px;
+    font-size: medium;
+}
+
+.handmade{
+    font-size: 14px;
+    font-weight: 250;
+}
+
+.titre{
+    padding-bottom: 20px;
+}
+
+.question{
+    padding: 10px;
+    font-weight: 300;
+}
