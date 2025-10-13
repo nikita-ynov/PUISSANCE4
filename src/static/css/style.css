@@ -7,24 +7,52 @@
 }
 
 body {
-    background: #ffffff;
-    background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
-    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(-45deg, #ff3c7c, #7b2ff7, #5636a1, #ff8c00);
+    background-size: 400% 400%;
+    animation: gradientMove 10s ease infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    color: white;
 }
 
-html, body {
-    height: 100%;              /* occupe toute la hauteur de la fenêtre */
-    margin: 0;                 /* enlève les marges par défaut */
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+html,
+body {
+    height: 100%;
+    /* occupe toute la hauteur de la fenêtre */
+    margin: 0;
+    /* enlève les marges par défaut */
     display: flex;
-    flex-direction: column;    /* empile header, main, footer */
+    flex-direction: column;
+    /* empile header, main, footer */
 }
 
 main {
-    flex: 1;                   /* prend toute la place dispo */
+    flex: 1;
+    /* prend toute la place dispo */
 }
 
 footer {
-    background: #333;          /* exemple */
+    background: #333;
+    /* exemple */
     color: white;
     text-align: center;
     padding: 10px;
@@ -33,7 +61,17 @@ footer {
 header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border-radius: 20px 20px 0 0;
+    padding: 2rem 3rem;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    transition: all 0.3s ease;
+    width: 600px;
 }
 
 .logo {
@@ -51,6 +89,8 @@ li,
 a {
     list-style: none;
     text-decoration: none;
+    color: #fff;
+
 }
 
 main {
@@ -60,31 +100,37 @@ main {
     align-items: center;
 }
 
-.table {
-    width: 500px;
-    height: 450px;
+.game__btn {
+    border: none;
+    background-color: #fff;
+    padding: .5rem;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+    transition: .3s;
 }
 
-.buttons__container {
-    width: 500px;
+.game__btn:hover {
+    opacity: .7;
+}
+
+.btn {
+    border: none;
+    background-color: #fff;
+    padding: .5rem 1rem;
+    border-radius: 0 0 10px 10px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn:hover {
+    opacity: .7;
+}
+
+.resetForm {
+    width: 100%;
     display: flex;
 }
 
-.buttons__container button {
-    width: calc(500px / 7);
-}
-
-.table__container {
-    position: relative;
-}
-
-.table__container .jetton {
-    position: absolute;
-    /* Tout en bas, si je veux ajouter 1 en haut c'est +70px */
-    bottom: 0px;
-    /* Pour aller a droit c'est aussi +70px par example x=1 c'est 80px, x=0 est 10px */
-    left: 0px;
-    width: 65px;
-    margin-bottom: 20px;
-    margin-left: 10px;
+.resetForm .btn {
+    width: 100%;
 }

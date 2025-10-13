@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"html/template"
 	"net/http"
 	"power4/controller/structure"
 	"power4/controller/utils"
@@ -63,9 +64,13 @@ func Step(w http.ResponseWriter, r *http.Request) {
 
 	if winner != "" {
 		// On annonce le gagnant et on propose de rejouer via un refresh/accueil.
+		text := "Rouge"
+		if winner == "yellow" {
+			text = "Jeune"
+		}
 		data := map[string]any{
 			"Title":      "Jeu",
-			"Message":    "Le joueur " + winner + " a gagné !",
+			"Message":    template.HTML("Le joueur <span class='" + winner + "'>" + text + "</span>  a gagné !"),
 			"Placements": gameTable.Placement,
 			"Winner":     winner,
 		}
@@ -112,9 +117,13 @@ func Step(w http.ResponseWriter, r *http.Request) {
 
 		if winner != "" {
 			// On annonce le gagnant et on propose de rejouer via un refresh/accueil.
+			text := "Rouge"
+			if winner == "yellow" {
+				text = "Jeune"
+			}
 			data := map[string]any{
 				"Title":      "Jeu",
-				"Message":    "Le joueur " + winner + " a gagné !",
+				"Message":    template.HTML("Le joueur <span class='" + winner + "'>" + text + "</span>  a gagné !"),
 				"Placements": gameTable.Placement,
 				"Winner":     winner,
 			}
@@ -132,14 +141,17 @@ func Step(w http.ResponseWriter, r *http.Request) {
 
 		// Couleur du prochain joueur (pour le message)
 		nextColor := "red"
+		text := "Rouge"
 		if currentPlayer == 2 {
 			nextColor = "yellow"
+			text = "Jeune"
 		}
 
 		data := map[string]any{
 			"Title":      "Jeu",
-			"Message":    "Tu as joué la pièce " + choice + ". À " + nextColor + " de jouer.",
+			"Message":    template.HTML("Tu as joué la pièce " + choice + ". À <span class='" + nextColor + "'>" + text + "</span> de jouer."),
 			"Placements": gameTable.Placement,
+			"color":      nextColor,
 		}
 		renderPage(w, "index.html", data)
 
