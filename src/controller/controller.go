@@ -16,9 +16,10 @@ func renderPage(w http.ResponseWriter, filename string, data any) {
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	data := map[string]string{
-		"Title":   "Accueil",
-		"Message": "Bienvenue sur la page d'accueil !",
+	data := map[string]any{
+		"Title":      "Accueil",
+		"Message":    "Bienvenue sur la page d'accueil !",
+		"Placements": gameTable.Placement,
 	}
 	renderPage(w, "index.html", data)
 }
@@ -49,48 +50,104 @@ func Contact(w http.ResponseWriter, r *http.Request) {
 		"Message": "Rentrer votre message",
 	}
 	renderPage(w, "contact.html", data)
-
 }
 
 var (
 	mu            sync.Mutex
-	currentPlayer = 1 // 1 = rouge, 2 = jaune
+	currentPlayer = 1                  // 1 = rouge, 2 = jaune
+	gameTable     = &structure.Table{} // état global
 )
 
 func Step(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		data := map[string]string{
-			"Title":   "Jeu",
-			"Message": "Choisis une pièce pour commencer",
+	winner := utils.CheckPlacement(gameTable)
+
+	if winner != "" {
+		// On annonce le gagnant et on propose de rejouer via un refresh/accueil.
+		data := map[string]any{
+			"Title":      "Jeu",
+			"Message":    "Le joueur " + winner + " a gagné !",
+			"Placements": gameTable.Placement,
+			"Winner":     winner,
 		}
 		renderPage(w, "index.html", data)
 		return
+	} else {
+		if r.Method != http.MethodPost {
+			renderPage(w, "index.html", map[string]any{
+				"Title":      "Jeu",
+				"Message":    "Choisis une pièce pour commencer",
+				"Placements": gameTable.Placement,
+			})
+			return
+		}
+
+		choice := r.FormValue("piece")
+
+		mu.Lock()
+		defer mu.Unlock()
+
+		// Couleur du joueur courant
+		color := "red"
+		if currentPlayer == 2 {
+			color = "yellow"
+		}
+
+		// 1) Essayer de placer la pièce
+		var placed bool
+		gameTable, placed = utils.PlacePiece(choice, color, gameTable)
+
+		// Si la pose échoue (colonne pleine), ne pas changer de joueur
+		if !placed {
+			data := map[string]any{
+				"Title":      "Jeu",
+				"Message":    "Colonne pleine ! Choisis une autre colonne.",
+				"Placements": gameTable.Placement,
+			}
+			renderPage(w, "index.html", data)
+			return
+		}
+
+		// 2) Vérifier s'il y a un gagnant
+
+		// 3) Construire le message et gérer le tour suivant / reset
+
+		// Alterner le joueur (partie continue)
+		if currentPlayer == 1 {
+			currentPlayer = 2
+		} else {
+			currentPlayer = 1
+		}
+
+		// Couleur du prochain joueur (pour le message)
+		nextColor := "red"
+		if currentPlayer == 2 {
+			nextColor = "yellow"
+		}
+
+		data := map[string]any{
+			"Title":      "Jeu",
+			"Message":    "Tu as joué la pièce " + choice + ". À " + nextColor + " de jouer.",
+			"Placements": gameTable.Placement,
+		}
+		renderPage(w, "index.html", data)
+
+	}
+}
+
+func Reset(w http.ResponseWriter, r *http.Request) {
+	// On accepte GET (depuis le bouton) ou POST au choix
+	if r.Method != http.MethodGet && r.Method != http.MethodPost {
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
 	}
 
-	choice := r.FormValue("piece") // assure-toi que tes boutons ont name="piece" et value="..."
-
-	// section critique : lire/modifier currentPlayer
 	mu.Lock()
-	var color string
-	if currentPlayer == 1 {
-		color = "red"
-	} else {
-		color = "yellow"
-	}
+	defer mu.Unlock()
 
-	table := utils.PlacePiece(choice, color, &structure.Table{})
-	data := map[string]any{
-		"Title":      "Jeu",
-		"Message":    "C'est au joueur " + color + " de jouer. Tu as choisi la pièce " + choice,
-		"Placements": table,
-	}
-	// alterner le joueur pour le prochain tour
-	if currentPlayer == 1 {
-		currentPlayer = 2
-	} else {
-		currentPlayer = 1
-	}
-	mu.Unlock()
+	// Réinitialiser l'état global
+	gameTable = &structure.Table{}
+	currentPlayer = 1
 
-	renderPage(w, "index.html", data)
+	// Retour à l'accueil propre
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
