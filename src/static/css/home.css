@@ -23,9 +23,9 @@
     /* tailles/repères alignés sur tes commentaires */
     --cell: 70px;
     /* taille d'une case (pas) */
-    --start-x: 10px;
+    --start-x: 5px;
     /* offset X initial des jetons */
-    --start-y: 20px;
+    --start-y: 15px;
     /* offset Y initial des jetons */
     position: relative;
     width: 500px;
