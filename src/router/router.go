@@ -13,7 +13,7 @@ func New() *http.ServeMux {
 	mux.HandleFunc("/contact", controller.Contact)
 	mux.HandleFunc("/step", controller.Step)
 	mux.HandleFunc("/reset", controller.Reset)
-	mux.HandleFunc("/changeName", controller.Reset)
+	mux.HandleFunc("/changeName", controller.ChangeName)
 
 	return mux
 }
