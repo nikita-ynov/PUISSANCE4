@@ -19,15 +19,18 @@
                 <h1>{{ .Title }}</h1>
                 <p>{{ .Message }}</p>
             </div>
+            {{if .Form}}
             <div>
-                <form method="post" action="/changeName">
+                <form class="enterName" method="post" action="/changeName">
                     <p class="txt">entrez nom joueur rouge</p>
-                    <input class="txtentre" type="text" name="namered">
+                    <input class="txtentre" type="text" name="nameRed">
                     <p class="txt">entrez nom joueur jaune</p>
-                    <input class="txtentre" type="text" name="nameyellow">
-                    <button type="submit">changer les noms</button>
+                    <input class="txtentre" type="text" name="nameYellow">
+                    <br><br>
+                    <button class="btnenv" type="submit">changer les noms</button>
                 </form>
             </div>
+            {{end}}
             <div class="game__container">
                 <form method="post" action="/step" class="buttons__container">
                     <button class="chip" type="submit" name="piece" value="1">piece 1</button>

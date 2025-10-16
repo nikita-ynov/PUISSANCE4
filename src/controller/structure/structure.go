@@ -9,3 +9,8 @@ type Placement struct {
 	Y     int
 	Color string
 }
+
+type PlayerNames struct {
+	NameRed    string
+	NameYellow string
+}

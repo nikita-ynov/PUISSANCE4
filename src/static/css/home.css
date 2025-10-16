@@ -212,3 +212,7 @@
     background: radial-gradient(circle at 30% 30%, #ffd633, #b38f00);
     box-shadow: 0 0 20px #ffd633;
 }
+
+.enterName{
+    margin-bottom: 20px;
+}
