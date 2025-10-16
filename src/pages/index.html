@@ -7,6 +7,7 @@
     <title>{{ .Title }}</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/contact.css">
 </head>
 
 <body>
@@ -18,7 +19,15 @@
                 <h1>{{ .Title }}</h1>
                 <p>{{ .Message }}</p>
             </div>
-
+            <div>
+                <form method="post" action="/changeName">
+                    <p class="txt">entrez nom joueur rouge</p>
+                    <input class="txtentre" type="text" name="namered">
+                    <p class="txt">entrez nom joueur jaune</p>
+                    <input class="txtentre" type="text" name="nameyellow">
+                    <button type="submit">changer les noms</button>
+                </form>
+            </div>
             <div class="game__container">
                 <form method="post" action="/step" class="buttons__container">
                     <button class="chip" type="submit" name="piece" value="1">piece 1</button>
