@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    
+
     <main>
         {{template "header" .}}
         <div class="game-card">
@@ -22,15 +22,18 @@
             {{if .Form}}
             <div>
                 <form class="enterName" method="post" action="/changeName">
-                    <p class="txt">entrez nom joueur rouge</p>
-                    <input class="txtentre" type="text" name="redName">
-                    <p class="txt">entrez nom joueur jaune</p>
-                    <input class="txtentre" type="text" name="yellowName">
-                    <br><br>
-                    <button class="btnenv" type="submit">changer les noms</button>
+                    <label for="redName">
+                        <p>Entrez nom joueur <span class="red">rouge</span></p>
+                        <input class="txtentre" type="text" name="redName">
+                    </label>
+                    <label for="redName">
+                        <p>Entrez nom joueur <span class="yellow">jaune</span></p>
+                        <input class="txtentre" type="text" name="yellowName">
+                    </label>
+                    <button class="btnenv" type="submit">Changer les noms</button>
                 </form>
             </div>
-            {{end}}
+            {{else}}
             <div class="game__container">
                 <form method="post" action="/step" class="buttons__container">
                     <button class="chip" type="submit" name="piece" value="1">piece 1</button>
@@ -42,7 +45,6 @@
                     <button class="chip" type="submit" name="piece" value="7">piece 7</button>
                 </form>
                 <div class="table__container">
-                    <!-- <img class="table" src="/static/images/tableau.png" alt=""> -->
                     {{range .Placements}}
                     <img style="left: {{.X}}px; bottom: {{.Y}}px;" class="jetton {{.Color}}"
                         src="/static/images/jeton_{{.Color}}.png" alt="">
@@ -52,6 +54,7 @@
                     <button class="btn" type="submit">Rejouer</button>
                 </form>
             </div>
+            {{end}}
         </div>
     </main>
 </body>

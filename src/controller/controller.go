@@ -80,7 +80,7 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 
 		data := map[string]any{
 			"Title":      "Accueil",
-			"Message":    "Vous avez bien changé les noms ! Choisisez une piece.",
+			"Message":    template.HTML("Vous avez bien changé les noms! C'est le jouer <span class='red'> " + redName + "</span> qui commance."),
 			"Placements": gameTable.Placement,
 			"redName":    redName,
 			"yellowName": yellowName,

@@ -11,6 +11,7 @@
 .btnenv:focus {
     transform: translateY(-2px) scale(1.01);
     box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+    cursor: pointer;
 }
 
 .contact{

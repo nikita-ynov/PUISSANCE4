@@ -123,10 +123,31 @@
     color: yellow;
 }
 
-.game-card {
+.about {
     max-height: 80vh;
     overflow-y: scroll;
     overflow-x: hidden;
+}
+
+.enterName {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.enterName label {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    max-width: 50%;
+}
+.enterName label span {
+    display: inline-block;
+}
+.game-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(15px);
@@ -215,6 +236,6 @@
     box-shadow: 0 0 20px #ffd633;
 }
 
-.enterName{
+.enterName {
     margin-bottom: 20px;
 }
