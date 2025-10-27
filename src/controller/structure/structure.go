@@ -14,3 +14,10 @@ type PlayerNames struct {
 	NameRed    string
 	NameYellow string
 }
+
+type Score struct {
+	ID           int
+	RedPlayer    string
+	YellowPlayer string
+	Winner       string
+}

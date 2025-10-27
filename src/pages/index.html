@@ -35,6 +35,7 @@
             </div>
             {{else}}
             <div class="game__container">
+                {{if not .GameFinished}}
                 <form method="post" action="/step" class="buttons__container">
                     <button class="chip" type="submit" name="piece" value="1">piece 1</button>
                     <button class="chip" type="submit" name="piece" value="2">piece 2</button>
@@ -44,6 +45,7 @@
                     <button class="chip" type="submit" name="piece" value="6">piece 6</button>
                     <button class="chip" type="submit" name="piece" value="7">piece 7</button>
                 </form>
+                {{end}}
                 <div class="table__container">
                     {{range .Placements}}
                     <img style="left: {{.X}}px; bottom: {{.Y}}px;" class="jetton {{.Color}}"

@@ -14,6 +14,7 @@ func New() *http.ServeMux {
 	mux.HandleFunc("/step", controller.Step)
 	mux.HandleFunc("/reset", controller.Reset)
 	mux.HandleFunc("/changeName", controller.ChangeName)
+	mux.HandleFunc("/scores", controller.Scores)
 
 	return mux
 }

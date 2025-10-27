@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
 	"power4/controller/structure"
@@ -9,6 +8,13 @@ import (
 	"power4/pages"
 	"sync"
 )
+
+// BD temporaire des scores
+var scores []structure.Score
+var nextID = 1
+
+// Verrou de fin de partie
+var gameFinished = false
 
 func renderPage(w http.ResponseWriter, filename string, data any) {
 	err := pages.Temp.ExecuteTemplate(w, filename, data)
@@ -19,12 +25,13 @@ func renderPage(w http.ResponseWriter, filename string, data any) {
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	data := map[string]any{
-		"Title":      "Accueil",
-		"Message":    "Bienvenue sur la page d'accueil !",
-		"Placements": gameTable.Placement,
-		"redName":    redName,
-		"yellowName": yellowName,
-		"Form":       true,
+		"Title":        "Accueil",
+		"Message":      "Bienvenue sur la page d'accueil !",
+		"Placements":   gameTable.Placement,
+		"redName":      redName,
+		"yellowName":   yellowName,
+		"Form":         true,
+		"GameFinished": gameFinished,
 	}
 	renderPage(w, "index.html", data)
 }
@@ -79,14 +86,14 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 		}
 
 		data := map[string]any{
-			"Title":      "Accueil",
-			"Message":    template.HTML("Vous avez bien changé les noms! C'est le jouer <span class='red'> " + redName + "</span> qui commance."),
-			"Placements": gameTable.Placement,
-			"redName":    redName,
-			"yellowName": yellowName,
-			"Form":       false,
+			"Title":        "Accueil",
+			"Message":      template.HTML("Vous avez bien changé les noms! C'est le jouer <span class='red'> " + redName + "</span> qui commance."),
+			"Placements":   gameTable.Placement,
+			"redName":      redName,
+			"yellowName":   yellowName,
+			"Form":         false,
+			"GameFinished": gameFinished,
 		}
-		fmt.Print(data)
 		renderPage(w, "index.html", data)
 		return
 	}
@@ -95,107 +102,164 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 func Step(w http.ResponseWriter, r *http.Request) {
 	winner := utils.CheckPlacement(gameTable)
 
-	if winner != "" {
-		// On annonce le gagnant et on propose de rejouer via un refresh/accueil.
+	// Si la partie est terminée, on bloque toute action et on affiche un message clair
+	if gameFinished {
+		msg := template.HTML("Partie terminée. Cliquez sur « Rejouer » pour relancer.")
+		text := ""
+		if winner != "" {
+			text = redName
+			if winner == "yellow" {
+				text = yellowName
+			}
+			msg = template.HTML("Partie terminée. <span class='" + winner + "'>" + template.HTMLEscapeString(text) + "</span> a déjà gagné. Cliquez « Rejouer ».")
+		}
+
+		renderPage(w, "index.html", map[string]any{
+			"Title":        "Jeu",
+			"Message":      msg,
+			"Placements":   gameTable.Placement,
+			"redName":      redName,
+			"yellowName":   yellowName,
+			"Winner":       winner,
+			"GameFinished": true,
+		})
+		return
+	}
+
+	// Si quelqu'un a gagné sur l'état actuel, on enregistre une seule fois
+	if winner != "" && !gameFinished {
+		gameFinished = true
+
 		text := redName
 		if winner == "yellow" {
 			text = yellowName
 		}
+
+		// Sauvegarde du score
+		scores = append(scores, structure.Score{
+			ID:           nextID,
+			RedPlayer:    redName,
+			YellowPlayer: yellowName,
+			Winner:       text,
+		})
+		nextID++
+
 		data := map[string]any{
-			"Title":      "Jeu",
-			"Message":    template.HTML("Le joueur <span class='" + winner + "'>" + text + "</span> a gagné !"),
-			"Placements": gameTable.Placement,
-			"redName":    redName,
-			"yellowName": yellowName,
-			"Winner":     winner,
+			"Title":        "Jeu",
+			"Message":      template.HTML("Le joueur <span class='" + winner + "'>" + text + "</span> a gagné !"),
+			"Placements":   gameTable.Placement,
+			"redName":      redName,
+			"yellowName":   yellowName,
+			"Winner":       winner,
+			"GameFinished": true,
 		}
 		renderPage(w, "index.html", data)
 		return
-	} else {
-		if r.Method != http.MethodPost {
-			renderPage(w, "index.html", map[string]any{
-				"Title":      "Jeu",
-				"Message":    "Choisis une pièce pour commencer",
-				"redName":    redName,
-				"yellowName": yellowName,
-				"Placements": gameTable.Placement,
-			})
-			return
+	}
+
+	// Méthode GET : afficher la page de jeu
+	if r.Method != http.MethodPost {
+		msg := "Choisis une pièce pour commencer"
+		if gameFinished {
+			msg = "Partie terminée. Cliquez sur « Rejouer » pour relancer."
 		}
+		renderPage(w, "index.html", map[string]any{
+			"Title":        "Jeu",
+			"Message":      msg,
+			"redName":      redName,
+			"yellowName":   yellowName,
+			"Placements":   gameTable.Placement,
+			"GameFinished": gameFinished,
+		})
+		return
+	}
 
-		choice := r.FormValue("piece")
+	choice := r.FormValue("piece")
 
-		mu.Lock()
-		defer mu.Unlock()
+	mu.Lock()
+	defer mu.Unlock()
 
-		// Couleur du joueur courant
-		color := "red"
-		if currentPlayer == 2 {
-			color = "yellow"
+	// Couleur du joueur courant
+	color := "red"
+	if currentPlayer == 2 {
+		color = "yellow"
+	}
+
+	// 1) Essayer de placer la pièce
+	var placed bool
+	gameTable, placed = utils.PlacePiece(choice, color, gameTable)
+
+	// Si la pose échoue (colonne pleine), ne pas changer de joueur
+	if !placed {
+		data := map[string]any{
+			"Title":        "Jeu",
+			"Message":      "Colonne pleine ! Choisis une autre colonne.",
+			"redName":      redName,
+			"yellowName":   yellowName,
+			"Placements":   gameTable.Placement,
+			"GameFinished": gameFinished,
 		}
+		renderPage(w, "index.html", data)
+		return
+	}
 
-		// 1) Essayer de placer la pièce
-		var placed bool
-		gameTable, placed = utils.PlacePiece(choice, color, gameTable)
+	// 2) Vérifier s'il y a un gagnant
+	winner = utils.CheckPlacement(gameTable)
+	if winner != "" && !gameFinished {
+		gameFinished = true
 
-		// Si la pose échoue (colonne pleine), ne pas changer de joueur
-		if !placed {
-			data := map[string]any{
-				"Title":      "Jeu",
-				"Message":    "Colonne pleine ! Choisis une autre colonne.",
-				"redName":    redName,
-				"yellowName": yellowName,
-				"Placements": gameTable.Placement,
-			}
-			renderPage(w, "index.html", data)
-			return
-		}
-
-		// 2) Vérifier s'il y a un gagnant
-		winner := utils.CheckPlacement(gameTable)
-
-		if winner != "" {
-			text := redName
-			if winner == "yellow" {
-				text = yellowName
-			}
-			data := map[string]any{
-				"Title":      "Jeu",
-				"Message":    template.HTML("Le joueur <span class='" + winner + "'>" + text + "</span> a gagné !"),
-				"Placements": gameTable.Placement,
-				"redName":    redName,
-				"yellowName": yellowName,
-				"Winner":     winner,
-			}
-			renderPage(w, "index.html", data)
-			return
-		}
-
-		// 3) Alterner le joueur
-		if currentPlayer == 1 {
-			currentPlayer = 2
-		} else {
-			currentPlayer = 1
-		}
-
-		// Couleur du prochain joueur (pour le message)
-		nextColor := "red"
 		text := redName
-		if currentPlayer == 2 {
-			nextColor = "yellow"
+		if winner == "yellow" {
 			text = yellowName
 		}
 
+		// Sauvegarde du score
+		scores = append(scores, structure.Score{
+			ID:           nextID,
+			RedPlayer:    redName,
+			YellowPlayer: yellowName,
+			Winner:       text,
+		})
+		nextID++
+
 		data := map[string]any{
-			"Title":      "Jeu",
-			"Message":    template.HTML("Tu as joué la pièce " + choice + ". À <span class='" + nextColor + "'>" + text + "</span> de jouer."),
-			"Placements": gameTable.Placement,
-			"redName":    redName,
-			"yellowName": yellowName,
-			"color":      nextColor,
+			"Title":        "Jeu",
+			"Message":      template.HTML("Le joueur <span class='" + winner + "'>" + text + "</span> a gagné !"),
+			"Placements":   gameTable.Placement,
+			"redName":      redName,
+			"yellowName":   yellowName,
+			"Winner":       winner,
+			"GameFinished": true,
 		}
 		renderPage(w, "index.html", data)
+		return
 	}
+
+	// 3) Alterner le joueur
+	if currentPlayer == 1 {
+		currentPlayer = 2
+	} else {
+		currentPlayer = 1
+	}
+
+	// Couleur du prochain joueur (pour le message)
+	nextColor := "red"
+	text := redName
+	if currentPlayer == 2 {
+		nextColor = "yellow"
+		text = yellowName
+	}
+
+	data := map[string]any{
+		"Title":        "Jeu",
+		"Message":      template.HTML("Tu as joué la pièce " + choice + ". À <span class='" + nextColor + "'>" + text + "</span> de jouer."),
+		"Placements":   gameTable.Placement,
+		"redName":      redName,
+		"yellowName":   yellowName,
+		"color":        nextColor,
+		"GameFinished": gameFinished,
+	}
+	renderPage(w, "index.html", data)
 }
 
 func Reset(w http.ResponseWriter, r *http.Request) {
@@ -210,7 +274,16 @@ func Reset(w http.ResponseWriter, r *http.Request) {
 	// Réinitialiser l'état global
 	gameTable = &structure.Table{}
 	currentPlayer = 1
+	gameFinished = false
 
 	// Retour à l'accueil propre
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func Scores(w http.ResponseWriter, r *http.Request) {
+	data := map[string]any{
+		"Title":  "Scores",
+		"Scores": scores,
+	}
+	renderPage(w, "scores.html", data)
 }

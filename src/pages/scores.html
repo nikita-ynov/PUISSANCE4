@@ -1,0 +1,53 @@
+{{define "scores.html"}}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Scores</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/about.css">
+    <link rel="stylesheet" href="static/css/home.css">
+    <link rel="stylesheet" href="static/css/contact.css">
+    <link rel="stylesheet" href="/static/css/score.css"> 
+</head>
+
+<body>
+    <main>
+        {{template "header" .}}
+        <div class="game-card">
+            <h1>Historique des parties</h1>
+            {{if .Scores}}
+            <div>
+
+                <table  class="scores-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Joueur Rouge</th>
+                            <th>Joueur Jaune</th>
+                            <th>Gagnant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .Scores}}
+                        <tr>
+                            <td>{{.ID}}</td>
+                            <td>{{.RedPlayer}}</td>
+                            <td>{{.YellowPlayer}}</td>
+                            <td>{{.Winner}}</td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+            {{else}}
+            <p>Aucune partie enregistrée.</p>
+            {{end}}
+            <p><a href="/">← Retour au jeu</a></p>
+        </div>
+    </main>
+</body>
+
+</html>
+{{end}}
