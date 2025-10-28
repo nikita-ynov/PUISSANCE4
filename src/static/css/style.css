@@ -37,22 +37,17 @@ body {
 html,
 body {
     height: 100%;
-    /* occupe toute la hauteur de la fenêtre */
     margin: 0;
-    /* enlève les marges par défaut */
     display: flex;
     flex-direction: column;
-    /* empile header, main, footer */
 }
 
 main {
     flex: 1;
-    /* prend toute la place dispo */
 }
 
 footer {
     background: #333;
-    /* exemple */
     color: white;
     text-align: center;
     padding: 10px;

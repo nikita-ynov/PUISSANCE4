@@ -13,38 +13,27 @@
     width: calc(500px / 7);
 }
 
-/* Masque l'image existante du plateau */
 .table {
     display: none;
 }
 
-/* === Board CSS only (no PNG) === */
 .table__container {
-    /* tailles/repères alignés sur tes commentaires */
     --cell: 70px;
-    /* taille d'une case (pas) */
     --start-x: 5px;
-    /* offset X initial des jetons */
     --start-y: 15px;
-    /* offset Y initial des jetons */
     position: relative;
     width: 500px;
     height: 450px;
     border-radius: 16px;
     overflow: hidden;
-
-    /* panneau bleu sombre + profondeur */
     background:
-        /* anneau doux autour de chaque trou */
         radial-gradient(circle at 35px 35px,
             rgba(255, 255, 255, 0.10) 23px,
             rgba(255, 255, 255, 0.04) 26px,
             rgba(255, 255, 255, 0.00) 27px) var(--start-x) var(--start-y)/var(--cell) var(--cell) repeat,
-        /* face interne avec trous sombres */
         radial-gradient(circle at 35px 35px,
             rgba(10, 14, 40, 0.95) 0 26px,
             rgba(10, 14, 40, 0.00) 27px) var(--start-x) var(--start-y)/var(--cell) var(--cell) repeat,
-        /* plaque de fond bleutée */
         linear-gradient(180deg, rgba(18, 22, 60, 0.85), rgba(6, 9, 30, 0.92));
     box-shadow:
         inset 0 0 0 1px rgba(255, 255, 255, 0.08),
@@ -54,22 +43,18 @@
     backdrop-filter: blur(6px);
 }
 
-/* jetons (PNG) : glow + petite animation à l'arrivée */
 .table__container .jetton {
     position: absolute;
     width: 65px;
     left: 0;
     bottom: 0;
     margin-left: 10px;
-    /* = --start-x */
     margin-bottom: 20px;
-    /* = --start-y */
     transform: translateZ(0);
     transition: transform .25s cubic-bezier(.2, .8, .2, 1), filter .25s;
     will-change: transform, filter;
 }
 
-/* lueur par couleur */
 .table__container .jetton.red {
     filter: drop-shadow(0 0 14px rgba(255, 59, 59, .65));
 }
@@ -78,7 +63,6 @@
     filter: drop-shadow(0 0 14px rgba(255, 214, 51, .6));
 }
 
-/* petit "pop" optionnel (ajoute la classe .drop à l'insertion) */
 @keyframes drop-pop {
     0% {
         transform: translateY(-20px) scale(.96);
@@ -95,7 +79,6 @@
     animation: drop-pop .22s ease-out both;
 }
 
-/* (facultatif) survol colonne : ajoute data-col (0..6) côté JS si tu veux un highlight */
 .table__container::after {
     content: "";
     position: absolute;
